@@ -34,13 +34,13 @@ set(INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE PATH "Installation dire
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKEDIR CMake)
 else()
-  set(DEF_INSTALL_CMAKEDIR share/cmake/${PROJECT_NAME})
+  set(DEF_INSTALL_CMAKEDIR lib/cmake/message)
 endif()
 set(INSTALL_CMAKEDIR ${DEF_INSTALL_CMAKEDIR} CACHE PATH "Installation directory for CMake files")
 
 # Report to user
 foreach(p LIB BIN INCLUDE CMAKE)
-  file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${INSTALL_${p}DIR} _path )
+  file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${INSTALL_${p}DIR} _path)
   message(STATUS "Installing ${p} components to ${_path}")
   unset(_path)
 endforeach()

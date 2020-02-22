@@ -154,6 +154,18 @@ install(
     COMPONENT dev
   )
 
+include(CMakePrintHelpers)
+cmake_print_properties(
+  DIRECTORIES ./ # ${CMAKE_CURRENT_SOURCE_DIR}/
+  PROPERTIES
+    BUILDSYSTEM_TARGETS
+  )
+
+get_property(TARGETS
+    DIRECTORY ./
+    PROPERTY BUILDSYSTEM_TARGETS
+    )
+
 install(
   EXPORT
     messageTargets

@@ -10,12 +10,12 @@ add_test(
 
 add_test(
   NAME use-target_configure
-  COMMAND
-    ${CMAKE_COMMAND} -H${CMAKE_CURRENT_LIST_DIR}/use_target
-                     -B${CMAKE_CURRENT_BINARY_DIR}/build_use-target
-                     -G${CMAKE_GENERATOR}
-                     -Dmessage_DIR=${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKEDIR}
-                     -DCMAKE_BUILD_TYPE=$<CONFIGURATION>
+  COMMAND ${CMAKE_COMMAND}
+    -H${CMAKE_CURRENT_LIST_DIR}/use_target
+    -B${CMAKE_CURRENT_BINARY_DIR}/build_use-target
+    -G${CMAKE_GENERATOR}
+    -Dmessage_DIR=${CMAKE_STAGING_PREFIX}/${INSTALL_CMAKEDIR}
+    -DCMAKE_BUILD_TYPE=$<CONFIGURATION>
   )
 set_tests_properties(use-target_configure
   PROPERTIES
@@ -24,9 +24,9 @@ set_tests_properties(use-target_configure
 
 add_test(
   NAME use-target_build
-  COMMAND
-    ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
-                     --config $<CONFIGURATION>
+  COMMAND ${CMAKE_COMMAND}
+    --build ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
+    --config $<CONFIGURATION>
   )
 set_tests_properties(use-target_build
   PROPERTIES
@@ -41,10 +41,10 @@ else()
 endif()
 add_test(
   NAME use-target_test
-  COMMAND
-    ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
-                     --target ${_test_target}
-                     --config $<CONFIGURATION>
+  COMMAND ${CMAKE_COMMAND}
+    --build ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
+    --target ${_test_target}
+    --config $<CONFIGURATION>
   )
 set_tests_properties(use-target_test
   PROPERTIES
@@ -54,8 +54,8 @@ unset(_test_target)
 
 add_test(
   NAME use-target_cleanup
-  COMMAND
-    ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
+  COMMAND ${CMAKE_COMMAND}
+    -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/build_use-target
   )
 set_tests_properties(use-target_cleanup
   PROPERTIES

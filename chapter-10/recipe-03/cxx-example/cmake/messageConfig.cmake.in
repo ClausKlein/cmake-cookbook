@@ -46,10 +46,7 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/messageTargets.cmake")
 check_required_components(
-  "message-shared"
-  "message-static"
-  "message-hello-world_wDSO"
-  "message-hello-world_wAR"
+  @TARGETS@
   )
 
 # Remove dependency on UUID if on Windows
