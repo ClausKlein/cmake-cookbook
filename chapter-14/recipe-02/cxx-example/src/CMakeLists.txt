@@ -16,8 +16,9 @@ target_include_directories(sum_integers
 option(ENABLE_COVERAGE "Enable coverage" ON)
 
 if(ENABLE_COVERAGE)
+  message("CMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID}")
   if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-    message(STATUS "Coverage analysis with gcov enabled") 
+    message(STATUS "Coverage analysis with gcov enabled")
     target_compile_options(sum_integers
       PUBLIC
         -fprofile-arcs -ftest-coverage -g

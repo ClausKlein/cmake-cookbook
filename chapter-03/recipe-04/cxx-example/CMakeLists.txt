@@ -1,12 +1,10 @@
 # set minimum cmake version
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
+include(before_project_setup OPTIONAL)
 # project name and language
 project(recipe-04 LANGUAGES CXX C Fortran)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include(build_options OPTIONAL)
 
 include(FortranCInterface)
 

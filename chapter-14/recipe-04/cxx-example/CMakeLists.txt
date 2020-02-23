@@ -17,10 +17,10 @@ target_link_libraries(example
     Threads::Threads
   )
 
-option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
+option(ENABLE_TSAN "Enable ThreadSanitizer" ON)
 
 if(ENABLE_TSAN)
-  if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+  if(CMAKE_CXX_COMPILER_ID MATCHES CLANG)
     message(STATUS "ThreadSanitizer enabled")
     target_compile_options(example
       PUBLIC

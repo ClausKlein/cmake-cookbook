@@ -29,8 +29,10 @@ CHECKS?='-*,misc-*,boost-*,cert-*,misc-unused-parameters'
 
 # prevent hard config of find_package(asio 1.14.1 CONFIG CMAKE_FIND_ROOT_PATH_BOTH)
 ifeq (NO${CROSS_COMPILE},NO)
-    CC:=/opt/local/bin/gcc
-    CXX:=/opt/local/bin/g++
+    # CC:=/opt/local/bin/clang
+    # CXX:=/opt/local/bin/clang++
+    CC:=/usr/bin/gcc
+    CXX:=/usr/bin/g++
 
     # NOTE: Do not uses with DESTDIR! CMAKE_INSTALL_PREFIX?=/
     # DESTDIR?=/tmp/staging/$(PROJECT_NAME)
@@ -41,7 +43,7 @@ ifeq (NO${CROSS_COMPILE},NO)
     CMAKE_INSTALL_PREFIX?=/usr/local
     export CMAKE_INSTALL_PREFIX
     CMAKE_STAGING_PREFIX?=/tmp/staging/$(PROJECT_NAME)$(CMAKE_INSTALL_PREFIX)
-    CMAKE_PREFIX_PATH?="$(CMAKE_STAGING_PREFIX);$(CMAKE_INSTALL_PREFIX);/opt/local;/usr"
+    CMAKE_PREFIX_PATH?="$(CMAKE_STAGING_PREFIX);$(CMAKE_INSTALL_PREFIX);/usr/local/opt/boost;/opt/local;/usr"
 else
     CMAKE_STAGING_PREFIX?=/tmp/staging/$(CROSS_COMPILE})$(PROJECT_NAME)
     CMAKE_PREFIX_PATH?="$(CMAKE_STAGING_PREFIX)"
@@ -54,6 +56,7 @@ BUILD_TYPE?=Debug
 BUILD_TYPE?=Release
 # GENERATOR:=Xcode
 GENERATOR?=Ninja
+VERBOSE?=-v
 
 # end of config part
 ##################################################
@@ -71,7 +74,7 @@ else
 endif
 
 all: setup .configure-$(BUILD_TYPE)
-	cmake --build $(BUILD_DIR)
+	cmake --build $(BUILD_DIR) -- $(VERBOSE)
 
 test: all
 	cd $(BUILD_DIR) && ctest -C $(BUILD_TYPE) --rerun-failed --output-on-failure .
@@ -84,7 +87,7 @@ run-clang-tidy: setup .configure-$(BUILD_TYPE) compile_commands.json
 	egrep '\b(warning|error):' run-clang-tidy.log | perl -pe 's/(^.*) (warning|error):/\2/' | sort -u
 
 setup: $(BUILD_DIR) .clang-tidy compile_commands.json
-	find . -name CMakeLists.txt -o -name '*.cmake' -o -name '*.cmake.in' -o -name '*meson*' > .buildfiles.lst
+	find . \( -type d -name '.build*' -prune \) -o -type f \( -name CMakeLists.txt -o -name '*.cmake' -o -name '*.cmake.in' -o -name '*meson*' \) -print > .buildfiles.lst
 
 #     -DINSTALL_CMAKEDIR=lib/cmake/$(PROJECT_NAME) \
 #
@@ -93,7 +96,7 @@ setup: $(BUILD_DIR) .clang-tidy compile_commands.json
       -DUSE_LCOV=$(USE_LOCV) -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
       -DCMAKE_PREFIX_PATH=$(CMAKE_PREFIX_PATH) \
       -DCMAKE_STAGING_PREFIX=$(CMAKE_STAGING_PREFIX) \
-      -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+      -DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER=${CC} -DCMAKE_CXX_COMPILER=${CXX} $(CURDIR)
 	touch $@
 
@@ -108,7 +111,7 @@ format: .clang-format
 	find . -type f \( -name '*.hxx' -o -name '*.hpp' -o -name '*.cxx' -o -name '*.cpp' \) -print0 | xargs -0 clang-format -style=file -i
 
 show: setup
-	cmake -S $(CURDIR) -B $(BUILD_DIR) -L
+	cmake -S $(CURDIR) -B $(BUILD_DIR) -L --trace
 
 check: $(BUILD_DIR)
 	cmake --build $(BUILD_DIR) --target $@ | tee run-clang-tidy.log 2>&1
