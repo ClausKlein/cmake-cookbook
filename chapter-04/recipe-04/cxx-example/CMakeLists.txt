@@ -1,13 +1,10 @@
 # set minimum cmake version
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
+include(before_project_setup OPTIONAL)
 # project name and language
 project(recipe-04 LANGUAGES CXX)
-
-# require C++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include(build_options OPTIONAL)
 
 # example library
 add_library(sum_integers sum_integers.cpp)
@@ -17,7 +14,7 @@ add_executable(sum_up main.cpp)
 target_link_libraries(sum_up sum_integers)
 
 # find boost library
-find_package(Boost 1.54 REQUIRED COMPONENTS unit_test_framework)
+find_package(boost_unit_test_framework 1.72 REQUIRED)
 
 add_executable(cpp_test test.cpp)
 
