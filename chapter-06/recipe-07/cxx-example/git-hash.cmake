@@ -5,7 +5,8 @@ set(GIT_HASH "unknown")
 find_package(Git QUIET)
 if(GIT_FOUND)
   execute_process(
-    COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%h
+    ### COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%h
+    COMMAND ${GIT_EXECUTABLE} describe --dirty --always
     OUTPUT_VARIABLE GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_QUIET
@@ -16,7 +17,8 @@ message(STATUS "Git hash is ${GIT_HASH}")
 
 # generate file version.hpp based on version.hpp.in
 configure_file(
-  ${CMAKE_CURRENT_LIST_DIR}/version.hpp.in
+  # ${CMAKE_CURRENT_LIST_DIR}/
+  version.hpp.in
   ${TARGET_DIR}/generated/version.hpp
   @ONLY
   )

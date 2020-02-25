@@ -1,13 +1,10 @@
 # set minimum cmake version
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
+include(before_project_setup OPTIONAL)
 # project name and language
 project(recipe-07 LANGUAGES CXX)
-
-# require C++11
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include(build_options OPTIONAL)
 
 # example code
 add_executable(example example.cpp)
@@ -23,7 +20,7 @@ add_custom_command(
     ${CMAKE_CURRENT_BINARY_DIR}/generated/version.hpp
     ALL
   COMMAND
-    ${CMAKE_COMMAND} -D TARGET_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/git-hash.cmake
+    ${CMAKE_COMMAND} -D TARGET_DIR=${CMAKE_CURRENT_BINARY_DIR} -P git-hash.cmake
   WORKING_DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
   )
