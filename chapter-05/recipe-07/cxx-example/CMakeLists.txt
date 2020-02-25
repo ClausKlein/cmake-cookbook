@@ -1,15 +1,15 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
+include(before_project_setup OPTIONAL)
+# project name and language
 project(recipe-07 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include(build_options OPTIONAL)
 
 list(APPEND CXX_BASIC_FLAGS "-g3" "-O1")
 
 include(CheckCXXCompilerFlag)
 
+# assress sanitize
 set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
 set(CMAKE_REQUIRED_FLAGS ${ASAN_FLAGS})
 check_cxx_compiler_flag(${ASAN_FLAGS} asan_works)
@@ -28,6 +28,7 @@ if(asan_works)
     )
 endif()
 
+# thread sanitize
 set(TSAN_FLAGS "-fsanitize=thread -fno-omit-frame-pointer -fPIE")
 set(CMAKE_REQUIRED_FLAGS ${TSAN_FLAGS})
 check_cxx_compiler_flag(${TSAN_FLAGS} tsan_works)
@@ -49,6 +50,7 @@ if(tsan_works)
     )
 endif()
 
+# memorey sanitize
 set(MSAN_FLAGS "-fsanitize=memory -fno-omit-frame-pointer -fPIE")
 set(CMAKE_REQUIRED_FLAGS ${MSAN_FLAGS})
 check_cxx_compiler_flag(${MSAN_FLAGS} msan_works)
